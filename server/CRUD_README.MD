@@ -59,6 +59,9 @@
               "size": "String",
               "quantity": "Number"
             }, ...
+          ],
+          "images": [
+            "String", ...
           ]
         }, ...
       ]
@@ -113,6 +116,9 @@
           "size": "String",
           "quantity": "Number"
         }, ...
+      ],
+      "images": [
+        "String", ...
       ]
     }
 ```
@@ -135,6 +141,9 @@
           "size": "String",
           "quantity": "Number"
         }, ...
+      ],
+      "images": [
+        "String", ...
       ]
     }
 ```
@@ -155,7 +164,10 @@
       "id": "Number",
       "name": "String",
       "listPrice": "Number",
-      "salePrice": "Number"
+      "salePrice": "Number",
+      "images": [
+        "String", ...
+      ]
     }
 ```
 
