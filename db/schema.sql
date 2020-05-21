@@ -26,6 +26,6 @@ CREATE TABLE quantity (
   colors_id Number NOT NULL,
   size TEXT UNIQUE NOT NULL,
   quantity NUMBER NOT NULL,
-  FOREIGN KEY products_id REFERENCES products_id,
-  FOREIGN KEY colors_id REFERENCES colors(id)
+  FOREIGN KEY products_id REFERENCES products (id),
+  FOREIGN KEY colors_id REFERENCES colors (id)
 )
