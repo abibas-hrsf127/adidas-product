@@ -10,7 +10,7 @@ CREATE TABLE products (
   reviewAverage NUMBER
 );
 
-CREATE TABLE colors (
+CREATE TABLE shoeColors (
   id SERIAL PRIMARY KEY,
   products_id Number NOT NULL,
   name TEXT NOT NULL,
@@ -20,12 +20,12 @@ CREATE TABLE colors (
   FOREIGN KEY products_id REFERENCES products (id)
 );
 
-CREATE TABLE quantity (
+CREATE TABLE shoeQuantity (
   id SERIAL PRIMARY KEY,
   products_id NUMBER NOT NULL,
   colors_id Number NOT NULL,
-  size TEXT UNIQUE NOT NULL,
+  shoeSize TEXT UNIQUE NOT NULL,
   quantity NUMBER NOT NULL,
   FOREIGN KEY products_id REFERENCES products (id),
-  FOREIGN KEY colors_id REFERENCES colors (id)
+  FOREIGN KEY colors_id REFERENCES shoe_colors (id)
 )

@@ -15,13 +15,12 @@ var schema = mongoose.Schema({
             type: Number,
             unique: true
           },
-          url: String,
           name: String,
           listPrice: Number,
           salePrice: Number,
           inventory: [
               {
-                  size: {
+                  shoeSize: {
                     type: String,
                     unique: true
                   },
