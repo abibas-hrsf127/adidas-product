@@ -1,33 +1,50 @@
 var mongoose = require('mongoose');
 
-var schema = mongoose.Schema({
+var inventorySchema = mongoose.Schema({
+  shoeSize: {
+    type: String,
+    unique: true
+  },
+  quantity: Number
+})
+
+var colorImagesSchema = mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true
+  }
+  imageUrl: String
+})
+
+var colorSchema = mongoose.Schema({
   id: {
     type: Number,
     unique: true
   },
-  name: String,
+  colorName: String,
+  listPrice: Number,
+  salePrice: Number,
+  shoeSize: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'inventorySchema'
+  }],
+  images: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'colorImagesSchema'
+  }]
+})
+
+var productSchema = mongoose.Schema({
+  id: {
+    type: Number,
+    unique: true
+  },
+  productName: String,
   collectionName: String,
   reviewCount: Number,
   reviewAverage: Number,
-  colors: [
-      {
-          id: {
-            type: Number,
-            unique: true
-          },
-          name: String,
-          listPrice: Number,
-          salePrice: Number,
-          inventory: [
-              {
-                  shoeSize: {
-                    type: String,
-                    unique: true
-                  },
-                  quantity: Number
-              }
-          ],
-          images: [String]
-      }
-  ]
+  colors: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'colorSchema'
+  }]
 });
