@@ -24,7 +24,7 @@ var generateProductData = (id) => {
   return res.join(',');
 }
 
-var generateColorData = (product_id) => {
+var generateColorData = (color_id, product_id) => {
   // color pool
   let colorNames = ['CLOUD WHITE', 'DASH GREY', 'SOLAR RED', 'CORE BLACK', 'FLASH ORANGE', 'CARBON', 'YELLOW', 'SCARLET', 'GLORY PURPLE', 'COLLEGIATE NAVY'];
 
@@ -32,6 +32,7 @@ var generateColorData = (product_id) => {
   let res = [];
 
   // create each data point
+  res.push(color_id)
   res.push(product_id); // product id
   res.push(`${colorNames[seedGen[0]]} / ${colorNames[seedGen[1]]} / ${colorNames[seedGen[2]]}`); // color name
   let listPrice = (Number(seedGen[3]) + 8) * 10;
@@ -42,12 +43,13 @@ var generateColorData = (product_id) => {
   return res.join(',');
 }
 
-var generateImageData = (color_id) => {
+var generateImageData = (image_id, color_id) => {
   let seedGen1 = String(Math.random() * Math.pow(10,17));
   let seedGen2 = String(Math.random() * Math.pow(10,17));
   let res = [];
 
   // create each data point
+  res.push(image_id);
   res.push(color_id);
   for (let i = 0; i < 4; i++) {
     res.push(seedGen1.slice(i * 3, (i * 3) + 3));
@@ -57,31 +59,33 @@ var generateImageData = (color_id) => {
   return res.join(',');
 }
 
-var generateQuantityData = (product_id, color_id) => {
-  let seedGen1 = String(Math.random() * Math.pow(10,17));
-  let seedGen2 = String(Math.random() * Math.pow(10,17));
-  let seedGen3 = String(Math.random() * Math.pow(10,17));
+var generateQuantityData = (qty_id, product_id, color_id) => {
+  let seedGen = String(Math.random() * Math.pow(10,17));
   let res = [];
 
   // create each data point
-  res.push(product_id);
-  res.push(color_id);
-  for (let i = 0; i < 15; i++) {
-    if (Math.floor(seedGen1[i]/5)) {
-
-      res.push(Number(seedGen2[i]) + Number(seedGen3[i]));
-    } else {
-      res.push(0);
+  for (let i = 0; i < 9; i+=2) {
+    let temp = [];
+    if (Math.floor(seedGen[i]) > 6) {
+      temp.push(qty_id);
+      temp.push(product_id);
+      temp.push(color_id);
+      temp.push(4 + (i * 0.5));
+      temp.push(seedGen[i+1]);
+      qty_id++;
+      res.push(temp.join(','));
     }
   }
 
-  return res.join(',')
+  return res;
 }
 
 var saveToFiles = () => {
   // save cnt for id
-  let cnt = 0;
-  let colorcnt = 0;
+  let cnt = 1;
+  let colorcnt = 1;
+  let imgcnt = 1;
+  let qtycnt = 1;
 
   for (let i = 0; i < 100; i++) {
     // set up file names
@@ -92,22 +96,28 @@ var saveToFiles = () => {
 
     // write headers
     fs.appendFileSync(productFile, 'id,name,collectionName,reviewCount,reviewAverage\n');
-    fs.appendFileSync(colorFile, 'product_id,colorName,listPrice,salePrice\n');
-    fs.appendFileSync(imageFile, 'color_id,img1,img2,img3,img4,img5,img6,img7,img8\n');
+    fs.appendFileSync(colorFile, 'id,product_id,colorName,listPrice,salePrice\n');
+    fs.appendFileSync(imageFile, 'id,color_id,img1,img2,img3,img4,img5,img6,img7,img8\n');
+    fs.appendFileSync(quantityFile, 'id,product_id,color_id,size,quantity\n')
 
     for (let j = 0; j < 100000; j++) {
       fs.appendFileSync(productFile, generateProductData(cnt) + '\n');
       for (let k = 0; k < (Math.ceil(Math.random()*5)); k++) {
-        fs.appendFileSync(colorFile, generateColorData(cnt) + '\n');
-        fs.appendFileSync(imageFile, generateImageData(colorcnt) + '\n');
-        fs.appendFileSync(quantityFile, generateQuantityData(cnt, colorcnt) + '\n');
+        fs.appendFileSync(colorFile, generateColorData(colorcnt, cnt) + '\n');
+        fs.appendFileSync(imageFile, generateImageData(imgcnt, colorcnt) + '\n');
+        let qtyData = generateQuantityData(qtycnt, cnt, colorcnt);
+        if (qtyData.length > 0) {
+          fs.appendFileSync(quantityFile, qtyData.join('\n') + '\n');
+        }
         colorcnt++;
+        imgcnt++;
+        qtycnt+=qtyData.length;
       }
       cnt++;
     }
 
     let date = new Date();
-    console.log(`file set ${i} written! at ${date.toLocaleDateString()}`);
+    console.log(`file set ${i} written! at ${date.toTimeString()}`);
   }
 };
 

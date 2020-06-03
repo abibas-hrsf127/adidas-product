@@ -15,3 +15,4 @@ client/src/components/clover.xml
 archive
 .vscode
 seeding/seed_data
+newrelic.js

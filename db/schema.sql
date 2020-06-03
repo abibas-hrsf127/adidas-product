@@ -2,36 +2,41 @@ DROP DATABASE IF EXISTS abibas_products;
 
 CREATE DATABASE abibas_products;
 
+\c abibas_products
+
 CREATE TABLE products (
-  id SERIAL PRIMARY KEY,
+  id integer PRIMARY KEY,
   name varchar(50) NOT NULL,
   collectionName varchar(50),
   reviewCount smallint,
-  reviewAverage smallint
+  reviewAverage decimal
 );
 
 CREATE TABLE shoeColors (
-  id SERIAL PRIMARY KEY,
-  products_id smallint NOT NULL,
-  name varchar(50) NOT NULL,
+  id integer PRIMARY KEY,
+  products_id integer REFERENCES products,
+  name varchar(500) NOT NULL,
   listPrice smallint NOT NULL,
-  salePrice smallint,
-  FOREIGN KEY products_id REFERENCES products (id)
+  salePrice smallint
 );
 
 CREATE TABLE colorImages (
-  id SERIAL PRIMARY KEY,
-  colors_id smallint NOT NULL,
-  imageUrl varchar(100) NOT NULL,
-  FOREIGN KEY colors_id REFERENCES shoeColors (id)
-)
+  id integer PRIMARY KEY,
+  colors_id integer REFERENCES shoeColors,
+  imageUrl1 varchar(500) NOT NULL,
+  imageUrl2 varchar(500) NOT NULL,
+  imageUrl3 varchar(500) NOT NULL,
+  imageUrl4 varchar(500) NOT NULL,
+  imageUrl5 varchar(500) NOT NULL,
+  imageUrl6 varchar(500) NOT NULL,
+  imageUrl7 varchar(500) NOT NULL,
+  imageUrl8 varchar(500) NOT NULL
+);
 
 CREATE TABLE shoeQuantity (
-  id SERIAL PRIMARY KEY,
-  products_id smallint NOT NULL,
-  colors_id smallint NOT NULL,
-  shoeSize varchar(50) UNIQUE NOT NULL,
-  quantity smallint NOT NULL,
-  FOREIGN KEY products_id REFERENCES products (id),
-  FOREIGN KEY colors_id REFERENCES shoeColors (id)
+  id integer PRIMARY KEY,
+  products_id integer REFERENCES products,
+  colors_id integer REFERENCES shoeColors,
+  shoeSize decimal NOT NULL,
+  quantity smallint NOT NULL
 );
