@@ -4,15 +4,14 @@ var router = express.Router();
 
 // retrieves shoe by :id
 router.route('/:id').get(function(req, res) {
-  Shoes.findOne(req.params.id, (err, products) => {
+  Shoes.findOne(req.params.id, (err, results) => {
     if (err) {
       console.log(err);
       res.status(500).end();
     } else {
-      res.json(products.pop());
+      res.send(results);
     }
   });
 });
-
 
 module.exports = router;

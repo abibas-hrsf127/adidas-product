@@ -21,8 +21,6 @@ class App extends Component {
 
   // Fetches a random product from the database
   componentDidMount() {
-    console.log('%cHIRE ME! ', 'color: red');
-    console.log('https://www.linkedin.com/in/robertheler/');
     let randomId;
 
     // to fetch a random product, uncomment this

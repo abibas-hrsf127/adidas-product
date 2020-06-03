@@ -1,33 +1,17 @@
-const { MongoClient } = require('mongodb');
+var mongoose = require('mongoose');
 
-var schema = mongoose.Schema({
+var productSchema = mongoose.Schema({
   id: {
-    type: String,
+    type: Number,
     unique: true
   },
-  name: String,
-  collection_name: String,
-  review_count: Number,
-  review_average: Number,
-  colors: [
-      {
-          id: Number,
-          url: String,
-          name: String,
-          list_price: Number,
-          sale_price: Number,
-          inventory: [
-              {
-                  size: String,
-                  quantity: Number
-              }
-          ],
-          images: [String]
-      }
-  ]
+  productName: String,
+  collectionName: String,
+  reviewCount: Number,
+  reviewAverage: Number
 });
 
-let ShoeModel = mongoose.model('Shoe', schema);
+let products = mongoose.model('products', productSchema);
 
 // connection options to remove warnings
 let options = {
@@ -36,24 +20,53 @@ let options = {
   useCreateIndex: true
 }
 
-mongoose.connect('mongodb://mongo:27017/adidas', options);
+mongoose.connect('mongodb://localhost:27017/abibas_products', options);
 
-// findAll retrieves all shoes
-function findAll(callback) {
-  ShoeModel.find({}, callback);
-}
-
-// findOne will retrieve the shoe associated with the given id
 function findOne(id, callback) {
-  mongoose.connect('mongodb://mongo:27017/adidas', options, () => {
-    ShoeModel.find({id: id}, callback)
-  })
-}
-
-// insertOne inserts a shoe into the db
-function insertOne(shoe, callback) {
-  ShoeModel.create(shoe, callback);
+  products.aggregate([
+    {
+      $lookup: {
+        from: "shoeColors",
+        localField: "id",
+        foreignField: "product_id",
+        as: "colors"
+      }
+    },
+    {
+      $unwind: "$colors"
+    },
+    {
+      $lookup: {
+        from: "colorImages",
+        localField: "colors.id",
+        foreignField: "color_id",
+        as: "colors.images"
+      }
+    },
+    {
+      $lookup: {
+        from: "shoeQuantity",
+        localField: "colors.id",
+        foreignField: "color_id",
+        as: "colors.quantity"
+      }
+    },
+    {
+      $match: {
+        $and: [{"id" : Number(id)}]
+      }
+    },
+    {
+      $group: {
+        _id: "$id",
+        name: { $first: "$name" },
+        collectionName: { $first: "$collectionName" },
+        reviewCount: { $first: "$reviewCount" },
+        reviewAverage: { $first: "$reviewAverage" },
+        colors: { $push: "$colors" }
+      }
+    }
+  ], callback);
 }
 
 exports.findOne = findOne;
-exports.insertOne = insertOne;

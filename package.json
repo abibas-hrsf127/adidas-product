@@ -52,6 +52,7 @@
     "jest-styled-components": "^7.0.2",
     "jquery": "^3.5.1",
     "minimist": "^1.2.5",
+    "mongodb": "^3.5.8",
     "mongoose": "^5.9.12",
     "mysql": "^2.18.1",
     "newrelic": "^6.8.0",

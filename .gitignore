@@ -16,3 +16,4 @@ archive
 .vscode
 seeding/seed_data
 newrelic.js
+newrelic_agent.log
