@@ -14,4 +14,15 @@ router.route('/:id').get(function(req, res) {
   });
 });
 
+router.route('/:id').post(function(req, res) {
+  Shoes.insert(req.body, (err, results) => {
+    if (err) {
+      console.log(err);
+      res.status(500).end();
+    } else {
+      res.send(results);
+    }
+  })
+})
+
 module.exports = router;

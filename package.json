@@ -54,6 +54,7 @@
     "minimist": "^1.2.5",
     "mongodb": "^3.5.8",
     "mongoose": "^5.9.12",
+    "mongoose-sequence": "^5.2.2",
     "mysql": "^2.18.1",
     "newrelic": "^6.8.0",
     "nodemon": "^2.0.4",
